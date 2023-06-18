@@ -1,5 +1,6 @@
 using System.Text;
-
+using System;
+using System.Data.SqlClient;
 namespace WinFormsApp1
 {
     public partial class Form1 : Form
@@ -55,7 +56,34 @@ namespace WinFormsApp1
                 return;
             }
             */
-            string ConnetionString=
+            string connectionString = @"Data Source=Omega\SQLEXPRESS;Initial Catalog=windowsFormTest;Integrated Security=True;Connect Timeout=30;MultiSubnetFailover=False";
+
+
+
+
+
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                connection.Open();
+
+                using (SqlCommand command = connection.CreateCommand())
+                {
+                    // SQL command to insert values into the table
+                    command.CommandText = "INSERT INTO UserData (Name, Email, Contact) VALUES (@name, @email, @contact)";
+
+                    // Set parameter values
+                    command.Parameters.AddWithValue("@name", name);
+                    command.Parameters.AddWithValue("@email", email);
+                    command.Parameters.AddWithValue("@contact", contact);
+
+                    // Execute the SQL command
+                    command.ExecuteNonQuery();
+                }
+            }
+
+            MessageBox.Show("Values inserted successfully:\n Name: "+name+"\n Email: "+email+"\n Contact: "+contact);
         }
+
     }
+    
 }
